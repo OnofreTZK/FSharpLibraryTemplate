@@ -19,6 +19,12 @@
       "commands": [
         "paket"
       ]
+    },
+    "fsharp.formatting.commandtool": {
+      "version": "11.5.1",
+      "commands": [
+        "fsdocs"
+      ]
     }
   }
 }

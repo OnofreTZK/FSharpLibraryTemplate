@@ -180,3 +180,38 @@ module PackageTasks =
         else
             failwith "aborted"
     }
+
+/// Build tasks for documentation setup and development
+module DocumentationTasks =
+
+    open ProjectInfo
+
+    open BasicTasks
+
+    let buildDocs = BuildTask.create "BuildDocs" [build; copyBinaries] {
+        printfn "building docs with stable version %s" stableVersionTag
+        runDotNet 
+            (sprintf "fsdocs build --eval --clean --property Configuration=Release --parameters fsdocs-package-version %s" stableVersionTag)
+            "./"
+    }
+
+    let buildDocsPrerelease = BuildTask.create "BuildDocsPrerelease" [setPrereleaseTag; build; copyBinaries] {
+        printfn "building docs with prerelease version %s" prereleaseTag
+        runDotNet 
+            (sprintf "fsdocs build --eval --clean --property Configuration=Release --parameters fsdocs-package-version %s" prereleaseTag)
+            "./"
+    }
+
+    let watchDocs = BuildTask.create "WatchDocs" [build; copyBinaries] {
+        printfn "watching docs with stable version %s" stableVersionTag
+        runDotNet 
+            (sprintf "fsdocs watch --eval --clean --property Configuration=Release --parameters fsdocs-package-version %s" stableVersionTag)
+            "./"
+    }
+
+    let watchDocsPrerelease = BuildTask.create "WatchDocsPrerelease" [setPrereleaseTag; build; copyBinaries] {
+        printfn "watching docs with prerelease version %s" prereleaseTag
+        runDotNet 
+            (sprintf "fsdocs watch --eval --clean --property Configuration=Release --parameters fsdocs-package-version %s" prereleaseTag)
+            "./"
+    }
